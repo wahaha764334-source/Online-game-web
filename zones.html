@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>實驗體 ONLINE - 官方網站</title>
+    <!-- 引入電競與帥氣英文字體 -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           底層控制：消滅靈異拉條，實現完美貼底
+           ========================================================================== */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        /* 使用 Flexbox 讓主容器與頁腳各司其職 */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-bottom: 60px !important; /* 留出空間，防止內容被滿版 Footer 擋住 */
+
+        }
+
+        /* 導覽列樣式 */
+        header {
+            background-color: #0b0b0b;
+            border-bottom: 2px solid #d4af37; /* 金色邊框 */
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Teko', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #e51b24; /* 戰鬥紅 */
+            text-decoration: none;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .logo span {
+            color: #d4af37; /* 金色 */
+        }
+
+        nav a {
+            color: #aaa;
+            text-decoration: none;
+            margin-right: 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: color 0.3s;
+            
+        }
+
+        nav a:hover {
+            color: #e51b24;
+        }
+
+        /* ==========================================================================
+           完美三欄式主版型佈局
+           ========================================================================== */
+        main {
+            flex: 1; /* 關鍵：強迫主內容區推開空間，把 Footer 壓在最下面 */
+            display: grid;
+            grid-template-columns: 280px 1fr 320px; /* 左、中、右黃金比例 */
+            gap: 25px;
+            max-width: 1600px;
+            width: 95%;
+            margin: 30px auto;
+        }
+
+        /* 通用區塊外框（黑金暗黑風） */
+        .card-box {
+            background-color: #0f0f0f;
+            border: 1px solid #222;
+            border-top: 3px solid #d4af37; /* 頂部金邊 */
+            border-radius: 4px;
+            padding: 20px;
+        }
+
+        /* 左側直列導覽 */
+        .sidebar-left h3 {
+            font-size: 1.2rem;
+            color: #d4af37;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+
+        .server-status {
+            margin-bottom: 25px;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-on { background-color: #00ff66; }
+        .status-off { background-color: #ff3333; }
+
+        .guide-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .guide-links li {
+            margin-bottom: 12px;
+        }
+
+        .guide-links a {
+            color: #bbb;
+            text-decoration: none;
+            transition: padding-left 0.3s, color 0.3s;
+        }
+
+        .guide-links a:hover {
+            color: #e51b24;
+            padding-left: 5px;
+        }
+
+        /* 中間巨大 Banner 區域 */
+        .content-center {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .banner-large {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url('10.jpg') center/cover;
+            height: 380px;
+            border: 1px solid #d4af37;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .banner-large h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: #fff;
+            margin: 0 0 10px 0;
+            text-shadow: 0 0 15px rgba(229, 27, 36, 0.8);
+        }
+
+        .banner-large p {
+            font-size: 1.2rem;
+            color: #d4af37;
+            margin: 0;
+        }
+
+        .info-section {
+            background-color: #0f0f0f;
+            border: 1px solid #222;
+            padding: 25px;
+            border-radius: 4px;
+        }
+
+        .info-section h2 {
+            color: #e51b24;
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+
+        /* 右側精緻會員登入中心 */
+        .sidebar-right h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: #d4af37;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: #e51b24;
+            outline: none;
+        }
+
+        /* 按鈕系統 */
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: #e51b24; /* 紅色大按鈕 */
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        .btn-login:hover {
+            background-color: #b31218;
+        }
+
+        .btn-sub-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-secondary {
+            padding: 10px;
+            background-color: #333; /* 灰色並排大按鈕 */
+            border: none;
+            color: #ccc;
+            font-weight: bold;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #444;
+            color: #fff;
+        }
+
+        /* ==========================================================================
+           網頁腳（Footer）：徹底移出、強制100%橫向滿版、貼緊最底
+           ========================================================================== */
+        footer {
+            background-color: #0b0b0b;
+            border-top: 2px solid #d4af37; /* 金色邊框 */
+            color: #666;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9rem;
+            width: 100%;
+            margin-top: auto; /* 確保內容少時被推至最底 */
+        }
+        /* ==========================================
+   強化：導覽列支援橫向 X 軸滑動/移動控制
+   ========================================== */
+header {
+    background-color: #0b0b0b;
+    border-bottom: 2px solid #d4af37; /* 金色邊框 */
+    padding: 15px 40px;
+    display: flex;
+    justify-content: flex-start; /* 關鍵：強制所有人從最左邊開始排，不再偏右！ */
+    align-items: center;
+    gap: 330px; /* 關鍵：給左邊 LOGO 與右邊導覽列之間留出一個 60px 的帥氣大間距 */
+}
+
+header nav {
+    display: flex !important;
+    white-space: nowrap !important; /* 強制所有按鈕排成一橫列，絕對不換行 */
+    overflow-x: auto !important;    /* 關鍵：當視窗縮小時，自動開啟 X 軸橫移 */
+    overflow-y: hidden !important;  /* 隱藏討厭的垂直拉條 */
+    -webkit-overflow-scrolling: touch;
+    gap: 25px; /* 按鈕跟按鈕之間的舒適間距 */
+    flex: 1; /* 讓導覽列擴展，擁有完整的橫移彈性空間 */
+}
+
+/* 隱藏預設很醜的滾動條，保持純黑極簡質感 */
+header nav::-webkit-scrollbar {
+    height: 0px; /* 設為 0 直接隱藏，乾淨俐落 */
+}
+header nav::-webkit-scrollbar-thumb {
+    background: #d4af37; /* 金色滾動條滑塊，對齊奧爾拉黑金風 */
+    border-radius: 2px;
+}
+
+header nav::-webkit-scrollbar-track {
+    background: #0b0b0b; /* 純黑軌道 */
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- 頂部導覽列 -->
+    <header>
+        <a href="index.html" class="logo">實驗體 <span>ONLINE</span></a>
+        
+    
+    <!-- 把帶有 onclick 的 HTML 標籤老老實實貼在這裡 -->
+    <nav>
+        <a href="notice.html">公告/消息</a>
+        <a href="background.html">遊戲背景</a>
+        <a href="newbie.html">新手補給站</a>
+        <a href="download.html">遊戲下載</a>
+        <a href="rules.html">遊戲規範</a>
+    </nav>
+</header>
+    </header>
+
+    <!-- 完美三欄式主版型區塊 -->
+    <main>
+        
+        <!-- 左側欄：獨立導覽 -->
+        <aside class="sidebar-left">
+            <div class="card-box server-status">
+                <h3> 伺服器狀況</h3>
+                <p><span class="status-dot status-on"></span> A 伺服器：開啟</p>
+                <p><span class="status-dot status-off"></span> B 伺服器：關閉</p>
+            </div>
+            
+            <div class="card-box">
+                <h3> 了解奧爾拉</h3>
+                <ul class="guide-links">
+                    <li>▪ <a href="ui.html" style="color: #e0e0e0; text-decoration: none; display: inline-block; padding: 2px 0;">基本介面</a></li>
+<li>▪ <a href="control.html" style="color: #e0e0e0; text-decoration: none; display: inline-block; padding: 2px 0;">基本操作</a></li>
+<li>▪ <a href="classes.html" style="color: #e0e0e0; text-decoration: none; display: inline-block; padding: 2px 0;">職業介紹</a></li>
+<li>▪ <a href="npc.html" style="color: #e0e0e0; text-decoration: none; display: inline-block; padding: 2px 0;">NPC 介紹</a></li>
+<li>▪ <a href="monsters.html" style="color: #e0e0e0; text-decoration: none; display: inline-block; padding: 2px 0;">怪物介紹</a></li>
+<li>▪ <a href="zones.html" style="color: #e0e0e0; text-decoration: none; display: inline-block; padding: 2px 0;">四大區介紹</a></li>
+<li>▪ <a href="guide.html" style="color: #e0e0e0; text-decoration: none; display: inline-block; padding: 2px 0;">1~50等可以幹嘛</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- 中間欄：巨大大畫面 Banner 與主要內容 -->
+        
+            <div class="info-section">
+            <h2> 四大區介紹</h2>
+
+</ul>
+</div>
+        </section>
+
+        <!-- 右側欄：精緻會員登入中心（已完美修正長度、補齊密碼與三大按鈕） -->
+<aside class="sidebar-right card-box" style="align-self: flex-start;">
+    <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #d4af37; text-align: center; margin-top: 0; margin-bottom: 20px;">會員登入中心</h3>
+    <form onsubmit="return false;">
+        <!-- 帳號輸入 -->
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px;">遊戲帳號 (Account)</label>
+            <input type="text" value="admin_test" placeholder="請輸入遊戲帳號" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+        </div>
+        
+        <!-- 補齊密碼輸入（原本遺失的部分） -->
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px;">遊戲密碼 (Password)</label>
+            <input type="password" value="123456" placeholder="請輸入遊戲密碼" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+        </div>
+        
+        <!-- 補齊紅色「登入遊戲」大按鈕 -->
+        <button type="submit" class="btn-login" style="width: 100%; padding: 12px; background-color: #e51b24; border: none; color: white; font-weight: bold; font-size: 1.1rem; border-radius: 4px; cursor: pointer; transition: background 0.3s; margin-top: 10px;">登入會員</button>
+        
+        <!-- 補齊灰色並排的「註冊帳號」與「忘記密碼」大按鈕 -->
+        <div class="btn-sub-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+            <button type="button" class="btn-secondary" style="padding: 10px; background-color: #333; border: none; color: #ccc; font-weight: bold; font-size: 0.95rem; border-radius: 4px; cursor: pointer;">註冊帳號</button>
+            <button type="button" class="btn-secondary" style="padding: 10px; background-color: #333; border: none; color: #ccc; font-weight: bold; font-size: 0.95rem; border-radius: 4px; cursor: pointer;">忘記密碼</button>
+        </div>
+    </form>
+</aside>
+        
+<style>
+    /* 強制修正右側登入框：不再跟著中間欄變形拉長，並補齊按鈕樣式 */
+    aside.sidebar-right, 
+    .sidebar-right {
+        align-self: flex-start !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+        body {
+    background-image: linear-gradient(rgba(5, 5, 5, 0.85), rgba(5, 5, 5, 0.85)), url('0.jpg') !important;
+    background-attachment: fixed !important;   /* 關鍵：讓背景圖固定住，網頁滾動時背景不會跟著亂動 */
+    background-size: cover !important;         /* 關鍵：圖片自動放大縮小，完美鋪滿整個螢幕 */
+    background-position: center center !important; /* 圖片置中 */
+    background-repeat: no-repeat !important;   /* 防止圖片因為尺寸不夠而重複拼貼 */
+    }
+
+    
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        background-color: #e51b24 !important; /* 紅色大按鈕 */
+        border: none;
+        color: white !important;
+        font-weight: bold;
+        font-size: 1.1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    
+    .btn-sub-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .btn-secondary {
+        padding: 10px;
+        background-color: #333 !important; 
+        border: none;
+        color: #ccc !important;
+        font-weight: bold;
+        font-size: 0.95rem;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    
+    .enforced-footer {
+    position: fixed !important;   
+    bottom: 0 !important;         
+    left: 0 !important;           
+    width: 100% !important;       
+    
+    background-color: #0b0b0b !important;
+    border-top: 2px solid #d4af37 !important; 
+    color: #666 !important;
+    text-align: center !important;
+    padding: 20px 0 !important;
+    font-size: 0.9rem !important;
+    z-index: 9999 !important;     
+    box-sizing: border-box !important;
+    font-family: 'Noto Sans TC', sans-serif;
+
+}
+
+</style>
+
+<script>
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        var rightSidebar = document.querySelector('aside.sidebar-right') || document.querySelector('.sidebar-right');
+        
+        if (rightSidebar) {
+            
+            rightSidebar.innerHTML = `
+                <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #d4af37; text-align: center; margin-top: 0; margin-bottom: 20px;">會員登入中心</h3>
+                <form onsubmit="return false;">
+                    <!-- 帳號輸入 -->
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px; text-align: left;">遊戲帳號 (Account)</label>
+                        <input type="text" id="login-acc" value="admin_test" placeholder="請輸入遊戲帳號" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    
+                    <!-- 補齊密碼輸入 -->
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px; text-align: left;">遊戲密碼 (Password)</label>
+                        <input type="password" id="login-pwd" value="123456" placeholder="請輸入遊戲密碼" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    
+                    <!-- 補齊紅色「登入遊戲」大按鈕 -->
+                    <button type="button" class="btn-login" style="width: 100%; padding: 12px; background: linear-gradient(90deg, #ff0055, #990033); border: none; color: white; font-family: 'Orbitron'; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; box-shadow: 0 0 10px #ff0055; margin-bottom: 15px;">登入會員</button>
+                    
+                    <!-- 補齊灰色「註冊帳號」與「忘記密碼」大按鈕 -->
+                    <div class="btn-sub-group" style="display: flex; gap: 10px;">
+                        <button type="button" class="btn-secondary" style="flex: 1; padding: 10px; background: #111; border: 1px solid #444; color: #aaa; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">註冊帳號</button>
+                        <button type="button" class="btn-secondary" style="flex: 1; padding: 10px; background: #111; border: 1px solid #444; color: #aaa; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">忘記密碼</button>
+                    </div>
+                </form>
+            `;
+
+            
+            var loginBtn = rightSidebar.querySelector('.btn-login');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function(e) {
+                    e.preventDefault(); 
+                    
+                    
+                    var accountInput = document.getElementById('login-acc').value;
+                    var passwordInput = document.getElementById('login-pwd').value;
+
+                    
+                    if ((accountInput === "admin_test" || accountInput === "admin") && passwordInput === "123456") {
+                        
+                        window.location.href = "admin.html";
+                    } else {
+                        alert("⚠️ 權限拒絕：訪問金鑰錯誤或意識流未同步。");
+                    }
+                });
+            }
+        }
+    });
+</script>
+
+
+<footer class="enforced-footer">
+    © 2026 實驗體 ONLINE. 本網頁為前端版型切頁展示。
+</footer>
