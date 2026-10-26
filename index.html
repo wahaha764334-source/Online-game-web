@@ -310,62 +310,41 @@ header nav::-webkit-scrollbar-track {
     background: #0b0b0b; /* 純黑軌道 */
 }
 @media (max-width: 768px) {
-  
-  /* 1. 頂部導覽列修正：強迫手機版變成上下排列，不硬擠 */
-  .navbar, 
-  nav, 
-  div[style*="justify-content"], 
-  header {
-    flex-direction: column !important;
-    height: auto !important;
-    padding: 10px !important;
-  }
 
-  /* 2. 核心大絕招：針對您說的「下面分三排」在手機版被擠扁的問題 */
-  /* 強制將網頁中所有的表格、Flex 橫排，在手機版一律轉為「垂直直排」疊羅漢 */
-  table, 
-  tbody, 
+  /* 🎯 精準鎖定：抓出網頁裡並排的結構，命令它們在手機版一律不准壓縮、寬度滿版 */
   tr, 
   td, 
-  .container, 
-  .row,
-  div[style*="display: flex"] {
-    display: block !important;
-    width: 100% !important;
+  div[style*="display: flex"] > div, 
+  div[style*="display: inline-block"] {
+    display: block !important;       /* 強制改為直排，一排一排疊羅漢 */
+    width: 100% !important;         /* 寬度 100% 滿版，不和別人擠 */
     max-width: 100% !important;
-    box-sizing: border-box !important;
-    float: none !important;
-    height: auto !important;
-  }
-
-  /* 3. 防止手機版格子被擠扁（沒收瀏覽器的壓縮權力） */
-  td, 
-  th, 
-  div[style*="flex"] {
+    flex-shrink: 0 !important;       /* 核心特效藥：命令瀏覽器絕對不准壓縮任何一排！ */
     flex-basis: 100% !important;
-    flex-shrink: 0 !important; /* 絕對不准壓縮中間那一排！ */
-    margin-bottom: 15px !important; /* 每排之間留點空隙 */
-    padding: 10px !important;
+    height: auto !important;         /* 高度放開，讓內容自由撐開 */
+    box-sizing: border-box !important;
+    margin-bottom: 20px !important;  /* 三排之間留下舒適的上下間距 */
   }
 
-  /* 4. 確保中間那排的「圖片、公告內容、登入框」在手機上不會爆出去 */
-  img, 
-  input, 
-  form, 
-  iframe {
+  /* 🛠️ 安全防護：強迫所有圖片和輸入框也自動適應手機寬度，不把中間那一排擠扁 */
+  img, input, select, textarea {
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
     box-sizing: border-box !important;
   }
 
-  /* 5. 滿版區塊修正 */
-  section, 
-  .page-section, 
-  div[style*="height: 100vh"] {
+  /* 🚫 導覽列保護盾：強制讓最上方的導覽列完全免疫，保持原本電腦版的完美外觀 */
+  .navbar, 
+  nav, 
+  header, 
+  div[id*="nav"], 
+  div[class*="nav"],
+  div[style*="justify-content"] {
+    flex-direction: row !important; /* 堅持橫向橫排，絕不變成直排 */
+    display: flex !important;
     height: auto !important;
-    min-height: 100vh !important;
-    padding: 30px 10px !important;
+    padding: initial; /* 恢復您原本設定的內距 */
   }
 }
     </style>
@@ -540,13 +519,13 @@ header nav::-webkit-scrollbar-track {
 </style>
 
 <script>
-    // 使用 JavaScript 自動修復：把遺失的密碼欄位與三大按鈕塞回登入框
-    document.addEventListener("DOMContentLoaded", function() {
-        var rightSidebar = document.querySelector('aside.sidebar-right') || document.querySelector('.sidebar-right');
-        
-        if (rightSidebar) {
-            // 1. 先把登入中心的 HTML 塞進去
-            rightSidebar.innerHTML = `
+ // 使用 JavaScript 自動修復：把遺失的密碼欄位與三大按鈕塞回登入框
+ document.addEventListener("DOMContentLoaded", function() {
+ var rightSidebar = document.querySelector('aside.sidebar-right') || document.querySelector('.sidebar-right');
+ 
+ if (rightSidebar) {
+ // 1. 先把登入中心的 HTML 塞進去
+ rightSidebar.innerHTML = `
                 <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #d4af37; text-align: center; margin-top: 0; margin-bottom: 20px;">會員登入中心</h3>
                 <form onsubmit="return false;">
                     <!-- 帳號輸入 -->
@@ -554,16 +533,16 @@ header nav::-webkit-scrollbar-track {
                         <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px; text-align: left;">遊戲帳號 (Account)</label>
                         <input type="text" id="login-acc" value="admin_test" placeholder="請輸入遊戲帳號" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                     </div>
-                    
+ 
                     <!-- 補齊密碼輸入 -->
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px; text-align: left;">遊戲密碼 (Password)</label>
                         <input type="password" id="login-pwd" value="123456" placeholder="請輸入遊戲密碼" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                     </div>
-                    
+ 
                     <!-- 補齊紅色「登入遊戲」大按鈕 -->
                     <button type="button" class="btn-login" style="width: 100%; padding: 12px; background: linear-gradient(90deg, #ff0055, #990033); border: none; color: white; font-family: 'Orbitron'; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; box-shadow: 0 0 10px #ff0055; margin-bottom: 15px;">登入會員</button>
-                    
+ 
                     <!-- 補齊灰色「註冊帳號」與「忘記密碼」大按鈕 -->
                     <div class="btn-sub-group" style="display: flex; gap: 10px;">
                         <button type="button" class="btn-secondary" style="flex: 1; padding: 10px; background: #111; border: 1px solid #444; color: #aaa; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">註冊帳號</button>
@@ -572,27 +551,27 @@ header nav::-webkit-scrollbar-track {
                 </form>
             `;
 
-            // 2. 當 HTML 塞進去「之後」，立刻在內部抓取這個新產生的按鈕並綁定跳轉邏輯
-            var loginBtn = rightSidebar.querySelector('.btn-login');
-            if (loginBtn) {
-                loginBtn.addEventListener('click', function(e) {
-                    e.preventDefault(); // 阻止表單預設動作
-                    
-                    // 精準抓取剛才動態產生的輸入欄位值
-                    var accountInput = document.getElementById('login-acc').value;
-                    var passwordInput = document.getElementById('login-pwd').value;
+ // 2. 當 HTML 塞進去「之後」，立刻在內部抓取這個新產生的按鈕並綁定跳轉邏輯
+ var loginBtn = rightSidebar.querySelector('.btn-login');
+ if (loginBtn) {
+ loginBtn.addEventListener('click', function(e) {
+ e.preventDefault(); // 阻止表單預設動作
+ 
+ // 精準抓取剛才動態產生的輸入欄位值
+ var accountInput = document.getElementById('login-acc').value;
+ var passwordInput = document.getElementById('login-pwd').value;
 
-                    // 檢查金鑰協議 (支援 admin 或 admin_test)
-                    if ((accountInput === "admin_test" || accountInput === "admin") && passwordInput === "123456") {
-                        // 金鑰正確，無縫跳轉至後台管理矩陣
-                        window.location.href = "admin.html";
-                    } else {
-                        alert("⚠️ 權限拒絕：訪問金鑰錯誤或意識流未同步。");
-                    }
-                });
-            }
-        }
-    });
+ // 檢查金鑰協議 (支援 admin 或 admin_test)
+ if ((accountInput === "admin_test" || accountInput === "admin") && passwordInput === "123456") {
+ // 金鑰正確，無縫跳轉至後台管理矩陣
+ window.location.href = "admin.html";
+ } else {
+ alert("⚠️ 權限拒絕：訪問金鑰錯誤或意識流未同步。");
+ }
+ });
+ }
+ }
+ });
 </script>
 
 
