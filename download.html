@@ -309,7 +309,73 @@ header nav::-webkit-scrollbar-thumb {
 header nav::-webkit-scrollbar-track {
     background: #0b0b0b; /* 純黑軌道 */
 }
+@media (max-width: 768px) {
+  /* 1. 全域防爆：確保所有東西最大就是螢幕寬度，不准往右爆出去 */
+  *, *:before, *:after {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
 
+  /* 2. 導覽列極簡垂直化：讓母選單和按鈕垂直置中排好，高度自動，絕不吃掉半個螢幕 */
+  .navbar, nav, header, [style*="justify-content"] {
+    display: flex !important;
+    flex-direction: column !important; /* 順著直排往下 */
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: auto !important; /* 隨內容自動，不綁死高度 */
+    padding: 10px !important; /* 極窄內距，省空間 */
+  }
+
+  /* 讓包裹按鈕的容器也垂直排好，把消失的選項拉回畫面中央 */
+  ul, .nav-links, div[style*="display"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 5px 0 0 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  /* 縮小手機版按鈕字體與距離，精緻省空間，確保看得到 */
+  nav a, .navbar a, li, .nav-links a {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 13px !important; /* 字體縮小，防止太粗獷 */
+    padding: 6px 0 !important;  /* 縮小上下間距，防止拉太長 */
+    margin: 0 !important;
+    white-space: normal !important; /* 允許字數多時自然換行，不往右爆 */
+  }
+
+  /* 3. 拯救中間那一排：解除所有寫死的寬度，強迫每一格都變滿版，絕對不准被擠扁 */
+  body, div, section, table, tr, main {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    float: none !important;
+  }
+
+  td, th, [style*="width"] {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    flex: none !important;
+    flex-shrink: 0 !important;
+    margin-bottom: 25px !important; /* 讓中間每排之間有舒適的上下呼吸空間 */
+    box-sizing: border-box !important;
+  }
+
+  /* 4. 確保圖片和輸入框也乖乖待在螢幕內不變形 */
+  img, input, select, textarea, form {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+  }
+}
     </style>
 </head>
 <body>

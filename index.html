@@ -310,68 +310,70 @@ header nav::-webkit-scrollbar-track {
     background: #0b0b0b; /* 純黑軌道 */
 }
 @media (max-width: 768px) {
-
-  /* 💣 1. 全域寬度炸彈：強制網頁上「所有元素」的寬度最大不能超過手機螢幕，防止東西爆出去消失 */
+  /* 1. 全域防爆：確保所有東西最大就是螢幕寬度，不准往右爆出去 */
   *, *:before, *:after {
     max-width: 100% !important;
     box-sizing: border-box !important;
   }
 
-  /* 🥞 2. 全域直排命令：強迫所有並排的容器（不管是 Flex 還是表格）在手機上一律垂直疊羅漢 */
-  body, 
-  div, 
-  section, 
-  table, 
-  tr, 
-  main {
+  /* 2. 導覽列極簡垂直化：讓母選單和按鈕垂直置中排好，高度自動，絕不吃掉半個螢幕 */
+  .navbar, nav, header, [style*="justify-content"] {
+    display: flex !important;
+    flex-direction: column !important; /* 順著直排往下 */
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: auto !important; /* 隨內容自動，不綁死高度 */
+    padding: 10px !important; /* 極窄內距，省空間 */
+  }
+
+  /* 讓包裹按鈕的容器也垂直排好，把消失的選項拉回畫面中央 */
+  ul, .nav-links, div[style*="display"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 5px 0 0 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  /* 縮小手機版按鈕字體與距離，精緻省空間，確保看得到 */
+  nav a, .navbar a, li, .nav-links a {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 13px !important; /* 字體縮小，防止太粗獷 */
+    padding: 6px 0 !important;  /* 縮小上下間距，防止拉太長 */
+    margin: 0 !important;
+    white-space: normal !important; /* 允許字數多時自然換行，不往右爆 */
+  }
+
+  /* 3. 拯救中間那一排：解除所有寫死的寬度，強迫每一格都變滿版，絕對不准被擠扁 */
+  body, div, section, table, tr, main {
     display: block !important;
     width: 100% !important;
     height: auto !important;
     float: none !important;
   }
 
-  /* 🛡️ 3. 拯救中間那一排：解除所有寫死的寬度，強迫每一格都變滿版，絕對不准被擠扁 */
-  td, 
-  th, 
-  [style*="width"] {
+  td, th, [style*="width"] {
     display: block !important;
-    width: 100% !important; /* 強制覆蓋掉標籤裡寫死的 px 寬度 */
+    width: 100% !important;
     max-width: 100% !important;
-    min-width: 0 !important; /* 解除最小寬度限制 */
+    min-width: 0 !important;
     flex: none !important;
     flex-shrink: 0 !important;
-    margin-bottom: 20px !important; /* 讓上下排有呼吸空間 */
+    margin-bottom: 25px !important; /* 讓中間每排之間有舒適的上下呼吸空間 */
+    box-sizing: border-box !important;
   }
 
-  /* 🧭 4. 導覽列與母選單特殊救回：不准直排！維持橫向，但如果塞不下，允許左右手指滑動 */
-  .navbar, 
-  nav, 
-  header,
-  ul,
-  [style*="justify-content"] {
-    display: flex !important;
-    flex-direction: row !important; /* 強制橫排，不准變長 */
-    flex-wrap: nowrap !important;   /* 絕對不換行 */
-    overflow-x: auto !important;    /* 關鍵：寬度不夠時，允許手指左右滑動看選單，選單就不會消失了！ */
-    -webkit-overflow-scrolling: touch !important;
+  /* 4. 確保圖片和輸入框也乖乖待在螢幕內不變形 */
+  img, input, select, textarea, form {
     width: 100% !important;
-  }
-
-  /* 隱藏選單的醜滾動條 */
-  .navbar::-webkit-scrollbar, 
-  nav::-webkit-scrollbar, 
-  ul::-webkit-scrollbar {
-    display: none !important;
-  }
-
-  /* 讓選單內的文字和按鈕乖乖橫向排隊，不要縮水 */
-  nav a, 
-  .navbar a, 
-  li {
-    display: inline-block !important;
-    flex-shrink: 0 !important;
-    white-space: nowrap !important;
-    padding: 10px 15px !important;
+    max-width: 100% !important;
+    height: auto !important;
+    box-sizing: border-box !important;
   }
 }
     </style>
@@ -546,13 +548,13 @@ header nav::-webkit-scrollbar-track {
 </style>
 
 <script>
- // 使用 JavaScript 自動修復：把遺失的密碼欄位與三大按鈕塞回登入框
- document.addEventListener("DOMContentLoaded", function() {
- var rightSidebar = document.querySelector('aside.sidebar-right') || document.querySelector('.sidebar-right');
- 
- if (rightSidebar) {
- // 1. 先把登入中心的 HTML 塞進去
- rightSidebar.innerHTML = `
+    // 使用 JavaScript 自動修復：把遺失的密碼欄位與三大按鈕塞回登入框
+    document.addEventListener("DOMContentLoaded", function() {
+        var rightSidebar = document.querySelector('aside.sidebar-right') || document.querySelector('.sidebar-right');
+        
+        if (rightSidebar) {
+            // 1. 先把登入中心的 HTML 塞進去
+            rightSidebar.innerHTML = `
                 <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #d4af37; text-align: center; margin-top: 0; margin-bottom: 20px;">會員登入中心</h3>
                 <form onsubmit="return false;">
                     <!-- 帳號輸入 -->
@@ -560,16 +562,16 @@ header nav::-webkit-scrollbar-track {
                         <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px; text-align: left;">遊戲帳號 (Account)</label>
                         <input type="text" id="login-acc" value="admin_test" placeholder="請輸入遊戲帳號" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                     </div>
- 
+                    
                     <!-- 補齊密碼輸入 -->
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px; text-align: left;">遊戲密碼 (Password)</label>
                         <input type="password" id="login-pwd" value="123456" placeholder="請輸入遊戲密碼" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                     </div>
- 
+                    
                     <!-- 補齊紅色「登入遊戲」大按鈕 -->
                     <button type="button" class="btn-login" style="width: 100%; padding: 12px; background: linear-gradient(90deg, #ff0055, #990033); border: none; color: white; font-family: 'Orbitron'; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; box-shadow: 0 0 10px #ff0055; margin-bottom: 15px;">登入會員</button>
- 
+                    
                     <!-- 補齊灰色「註冊帳號」與「忘記密碼」大按鈕 -->
                     <div class="btn-sub-group" style="display: flex; gap: 10px;">
                         <button type="button" class="btn-secondary" style="flex: 1; padding: 10px; background: #111; border: 1px solid #444; color: #aaa; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">註冊帳號</button>
@@ -578,27 +580,27 @@ header nav::-webkit-scrollbar-track {
                 </form>
             `;
 
- // 2. 當 HTML 塞進去「之後」，立刻在內部抓取這個新產生的按鈕並綁定跳轉邏輯
- var loginBtn = rightSidebar.querySelector('.btn-login');
- if (loginBtn) {
- loginBtn.addEventListener('click', function(e) {
- e.preventDefault(); // 阻止表單預設動作
- 
- // 精準抓取剛才動態產生的輸入欄位值
- var accountInput = document.getElementById('login-acc').value;
- var passwordInput = document.getElementById('login-pwd').value;
+            // 2. 當 HTML 塞進去「之後」，立刻在內部抓取這個新產生的按鈕並綁定跳轉邏輯
+            var loginBtn = rightSidebar.querySelector('.btn-login');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function(e) {
+                    e.preventDefault(); // 阻止表單預設動作
+                    
+                    // 精準抓取剛才動態產生的輸入欄位值
+                    var accountInput = document.getElementById('login-acc').value;
+                    var passwordInput = document.getElementById('login-pwd').value;
 
- // 檢查金鑰協議 (支援 admin 或 admin_test)
- if ((accountInput === "admin_test" || accountInput === "admin") && passwordInput === "123456") {
- // 金鑰正確，無縫跳轉至後台管理矩陣
- window.location.href = "admin.html";
- } else {
- alert("⚠️ 權限拒絕：訪問金鑰錯誤或意識流未同步。");
- }
- });
- }
- }
- });
+                    // 檢查金鑰協議 (支援 admin 或 admin_test)
+                    if ((accountInput === "admin_test" || accountInput === "admin") && passwordInput === "123456") {
+                        // 金鑰正確，無縫跳轉至後台管理矩陣
+                        window.location.href = "admin.html";
+                    } else {
+                        alert("⚠️ 權限拒絕：訪問金鑰錯誤或意識流未同步。");
+                    }
+                });
+            }
+        }
+    });
 </script>
 
 
