@@ -309,7 +309,65 @@ header nav::-webkit-scrollbar-thumb {
 header nav::-webkit-scrollbar-track {
     background: #0b0b0b; /* 純黑軌道 */
 }
+@media (max-width: 768px) {
+  
+  /* 1. 頂部導覽列修正：強迫手機版變成上下排列，不硬擠 */
+  .navbar, 
+  nav, 
+  div[style*="justify-content"], 
+  header {
+    flex-direction: column !important;
+    height: auto !important;
+    padding: 10px !important;
+  }
 
+  /* 2. 核心大絕招：針對您說的「下面分三排」在手機版被擠扁的問題 */
+  /* 強制將網頁中所有的表格、Flex 橫排，在手機版一律轉為「垂直直排」疊羅漢 */
+  table, 
+  tbody, 
+  tr, 
+  td, 
+  .container, 
+  .row,
+  div[style*="display: flex"] {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    float: none !important;
+    height: auto !important;
+  }
+
+  /* 3. 防止手機版格子被擠扁（沒收瀏覽器的壓縮權力） */
+  td, 
+  th, 
+  div[style*="flex"] {
+    flex-basis: 100% !important;
+    flex-shrink: 0 !important; /* 絕對不准壓縮中間那一排！ */
+    margin-bottom: 15px !important; /* 每排之間留點空隙 */
+    padding: 10px !important;
+  }
+
+  /* 4. 確保中間那排的「圖片、公告內容、登入框」在手機上不會爆出去 */
+  img, 
+  input, 
+  form, 
+  iframe {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 5. 滿版區塊修正 */
+  section, 
+  .page-section, 
+  div[style*="height: 100vh"] {
+    height: auto !important;
+    min-height: 100vh !important;
+    padding: 30px 10px !important;
+  }
+}
     </style>
 </head>
 <body>
