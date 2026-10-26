@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>實驗體 ONLINE - 會員註冊中心</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <!-- 換成套用後台霓虹風格的超連結 -->
+<a href="index.html" class="stolen-brand-logo">實驗體 ONLINE</a>
+        <div class="nav-links">
+            <a href="index.html">首頁</a>                       
+        </div>
+    </nav>
+
+    <header>
+   
+
+    <main class="page-section">
+        <div class="register-container">
+            <div class="form-header">
+                <h2>實驗體工作室</h2>
+                <p>建立您的帳戶</p>
+            </div>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="username">遊戲帳號 (Account)</label>
+                    <input type="text" id="username" placeholder="請輸入 4-12 位英數字" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">電子信箱 (E-mail)</label>
+                    <input type="email" id="email" placeholder="驗證與找回密碼使用" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">遊戲密碼 (Password)</label>
+                    <input type="password" id="password" placeholder="請輸入 6 位以上密碼" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">確認密碼 (Confirm Password)</label>
+                    <input type="password" id="confirmPassword" placeholder="再次輸入密碼確認" required>
+                </div>
+
+                <div class="form-checkbox">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">我已閱讀並同意遵守 <span>《實驗體 ONLINE 遊戲規範》</span></label>
+                </div>
+
+                <button type="submit" class="btn-submit">啟動實驗體註冊</button>
+            </form>
+
+            <div class="form-footer">
+                <a href="index.html">已有帳號？返回登入中心</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (username.length < 4 || username.length > 12) {
+                alert("❌ 註冊失敗：帳號長度必須在 4 到 12 個字元之間！");
+                console.log("print: 帳號長度驗證失敗"); 
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("❌ 註冊失敗：兩次輸入的密碼不一致！");
+                console.log("print: 密碼不一致");
+                return;
+            }
+
+            if (password.length < 6) {
+                alert("❌ 註冊失敗：為了帳號安全，密碼必須大於 6 個字！");
+                console.log("print: 密碼太短");
+                return;
+            }
+
+            alert("🎉 註冊成功！實驗體資料已同步至伺服器，請返回首頁登入。");
+            console.log("print: 玩家 " + username + " 註冊成功！資料包已寫入。");
+        });
+    </script>
+</body>
+</html>
+    <style>
+        /* 從後台偷出來的帥氣霓虹 LOGO 樣式 */
+.stolen-brand-logo {
+    font-size: 1.6rem; /* 放大一點適合首頁 */
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none; /* 消滅超連結下底線 */
+    /* 核心關鍵：後台專屬的霓虹粉紅發光特效 */
+    text-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 
+                 0 0 20px rgba(255, 0, 85, 0.5); 
+    transition: all 0.3s ease;
+}
+
+/* 加上滑鼠移上去時的科技感變色回饋 */
+.stolen-brand-logo:hover {
+    color: #00ffcc; /* 變成後台的螢光藍綠色 */
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 
+                 0 0 20px rgba(0, 255, 204, 0.5);
+}
+
+    </style>

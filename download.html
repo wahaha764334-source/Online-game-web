@@ -309,6 +309,26 @@ header nav::-webkit-scrollbar-thumb {
 header nav::-webkit-scrollbar-track {
     background: #0b0b0b; /* 純黑軌道 */
 }
+/* 從後台偷出來的帥氣霓虹 LOGO 樣式 */
+.stolen-brand-logo {
+    font-size: 1.6rem; /* 放大一點適合首頁 */
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none; /* 消滅超連結下底線 */
+    /* 核心關鍵：後台專屬的霓虹粉紅發光特效 */
+    text-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 
+                 0 0 20px rgba(255, 0, 85, 0.5); 
+    transition: all 0.3s ease;
+}
+
+/* 加上滑鼠移上去時的科技感變色回饋 */
+.stolen-brand-logo:hover {
+    color: #00ffcc; /* 變成後台的螢光藍綠色 */
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 
+                 0 0 20px rgba(0, 255, 204, 0.5);
+}
 @media (max-width: 768px) {
   /* 1. 全域防爆：確保所有東西最大就是螢幕寬度，不准往右爆出去 */
   *, *:before, *:after {
@@ -316,40 +336,43 @@ header nav::-webkit-scrollbar-track {
     box-sizing: border-box !important;
   }
 
-  /* 2. 導覽列極簡垂直化：讓母選單和按鈕垂直置中排好，高度自動，絕不吃掉半個螢幕 */
+  /* 2. 導覽列極致精簡橫排：徹底解決「由上往下長」的問題 */
   .navbar, nav, header, [style*="justify-content"] {
     display: flex !important;
-    flex-direction: column !important; /* 順著直排往下 */
+    flex-direction: column !important; /* Logo 在上，選單在下 */
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
-    height: auto !important; /* 隨內容自動，不綁死高度 */
-    padding: 10px !important; /* 極窄內距，省空間 */
+    height: auto !important;
+    padding: 10px 5px !important; /* 縮小上下間距 */
   }
 
-  /* 讓包裹按鈕的容器也垂直排好，把消失的選項拉回畫面中央 */
+  /* 關鍵修正：強迫這 5 個選項改為「左右橫向並排」，絕不往下長 */
   ul, .nav-links, div[style*="display"] {
     display: flex !important;
-    flex-direction: column !important;
+    flex-direction: row !important; /* 👈 強制橫向並排！ */
+    flex-wrap: wrap !important;     /* 容許螢幕太窄時自動換兩行，但絕不拉長 */
     align-items: center !important;
+    justify-content: center !important;
     width: 100% !important;
-    margin: 5px 0 0 0 !important;
+    margin: 8px 0 0 0 !important;
     padding: 0 !important;
+    gap: 8px 12px !important;      /* 限制按鈕之間的左右與上下間距 */
     list-style: none !important;
   }
 
-  /* 縮小手機版按鈕字體與距離，精緻省空間，確保看得到 */
+  /* 縮小手機版選項字體，讓它們橫排時能完美塞進螢幕 */
   nav a, .navbar a, li, .nav-links a {
-    display: block !important;
-    width: 100% !important;
+    display: inline-block !important;
+    width: auto !important;         /* 👈 解除滿寬，讓按鈕各別縮小 */
     text-align: center !important;
-    font-size: 13px !important; /* 字體縮小，防止太粗獷 */
-    padding: 6px 0 !important;  /* 縮小上下間距，防止拉太長 */
+    font-size: 12px !important;    /* 字體稍微縮小，更精緻 */
+    padding: 4px 6px !important;   /* 👈 內距縮到最小，徹底壓低 Y 軸高度 */
     margin: 0 !important;
-    white-space: normal !important; /* 允許字數多時自然換行，不往右爆 */
+    white-space: nowrap !important; /* 防止單個按鈕內的字自己斷行 */
   }
 
-  /* 3. 拯救中間那一排：解除所有寫死的寬度，強迫每一格都變滿版，絕對不准被擠扁 */
+  /* 3. 拯救下方區塊：解除所有寫死的寬度，強迫「伺服器狀況」彈開變滿版 */
   body, div, section, table, tr, main {
     display: block !important;
     width: 100% !important;
@@ -364,11 +387,11 @@ header nav::-webkit-scrollbar-track {
     min-width: 0 !important;
     flex: none !important;
     flex-shrink: 0 !important;
-    margin-bottom: 25px !important; /* 讓中間每排之間有舒適的上下呼吸空間 */
+    margin-bottom: 20px !important; 
     box-sizing: border-box !important;
   }
 
-  /* 4. 確保圖片和輸入框也乖乖待在螢幕內不變形 */
+  /* 4. 確保圖片和內容也乖乖待在螢幕內不變形 */
   img, input, select, textarea, form {
     width: 100% !important;
     max-width: 100% !important;
@@ -382,7 +405,7 @@ header nav::-webkit-scrollbar-track {
 
     <!-- 頂部導覽列 -->
     <header>
-        <a href="index.html" class="logo">實驗體 <span>ONLINE</span></a>
+        <a href="index.html" class="stolen-brand-logo">實驗體 ONLINE</a>
         
     
     <!-- 把帶有 onclick 的 HTML 標籤老老實實貼在這裡 -->
@@ -531,54 +554,57 @@ header nav::-webkit-scrollbar-track {
 </style>
 
 <script>
-    // 使用 JavaScript 自動修復：把遺失的密碼欄位與三大按鈕塞回登入框
     document.addEventListener("DOMContentLoaded", function() {
         var rightSidebar = document.querySelector('aside.sidebar-right') || document.querySelector('.sidebar-right');
         
         if (rightSidebar) {
-            // 1. 先把登入中心的 HTML 塞進去
+            // 1. 動態塞入登入表單（按鈕改為 type="button" 觸發 JS 判斷）
             rightSidebar.innerHTML = `
                 <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #d4af37; text-align: center; margin-top: 0; margin-bottom: 20px;">會員登入中心</h3>
                 <form onsubmit="return false;">
                     <!-- 帳號輸入 -->
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px; text-align: left;">遊戲帳號 (Account)</label>
-                        <input type="text" id="login-acc" value="admin_test" placeholder="請輸入遊戲帳號" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                        <input type="text" id="login-acc" value="user" placeholder="請輸入遊戲帳號" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                     </div>
                     
-                    <!-- 補齊密碼輸入 -->
+                    <!-- 密碼輸入 -->
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label style="display: block; font-size: 0.9rem; color: #888; margin-bottom: 5px; text-align: left;">遊戲密碼 (Password)</label>
-                        <input type="password" id="login-pwd" value="123456" placeholder="請輸入遊戲密碼" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                        <input type="password" id="login-pwd" value="1234" placeholder="請輸入遊戲密碼" style="width: 100%; padding: 10px; background-color: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                     </div>
                     
-                    <!-- 補齊紅色「登入遊戲」大按鈕 -->
-                    <button type="button" class="btn-login" style="width: 100%; padding: 12px; background: linear-gradient(90deg, #ff0055, #990033); border: none; color: white; font-family: 'Orbitron'; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; box-shadow: 0 0 10px #ff0055; margin-bottom: 15px;">登入會員</button>
+                    <!-- 登入按鈕 -->
+                    <button type="button" id="submit-login-btn" style="display: block; text-align: center; width: 100%; padding: 14px 0; background: linear-gradient(90deg, #ff0055, #990033); border: none; color: white; font-family: 'Orbitron'; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; box-shadow: 0 0 10px #ff0055; margin-bottom: 15px; box-sizing: border-box;">登入會員</button>
                     
-                    <!-- 補齊灰色「註冊帳號」與「忘記密碼」大按鈕 -->
-                    <div class="btn-sub-group" style="display: flex; gap: 10px;">
-                        <button type="button" class="btn-secondary" style="flex: 1; padding: 10px; background: #111; border: 1px solid #444; color: #aaa; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">註冊帳號</button>
-                        <button type="button" class="btn-secondary" style="flex: 1; padding: 10px; background: #111; border: 1px solid #444; color: #aaa; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">忘記密碼</button>
+                    <!-- 下方小按鈕 -->
+                    <div class="btn-sub-group" style="display: flex; gap: 10px; width: 100%;">
+                        <a href="register.html" class="btn-secondary" style="display: block; text-align: center; text-decoration: none; flex: 1; padding: 12px 0; background: #333; border: none; color: #ccc; font-family: 'Noto Sans TC'; font-size: 0.95rem; font-weight: bold; border-radius: 4px; cursor: pointer; transition: background 0.3s; box-sizing: border-box;">註冊帳號</a>
+                        <a href="forgot-password.html" class="btn-secondary" style="display: block; text-align: center; text-decoration: none; flex: 1; padding: 12px 0; background: #333; border: none; color: #ccc; font-family: 'Noto Sans TC'; font-size: 0.95rem; font-weight: bold; border-radius: 4px; cursor: pointer; transition: background 0.3s; box-sizing: border-box;">忘記密碼</a>
                     </div>
                 </form>
             `;
 
-            // 2. 當 HTML 塞進去「之後」，立刻在內部抓取這個新產生的按鈕並綁定跳轉邏輯
-            var loginBtn = rightSidebar.querySelector('.btn-login');
+            // 2. 綁定點擊事件，進行身分驗證與分流
+            var loginBtn = document.getElementById('submit-login-btn');
             if (loginBtn) {
-                loginBtn.addEventListener('click', function(e) {
-                    e.preventDefault(); // 阻止表單預設動作
-                    
-                    // 精準抓取剛才動態產生的輸入欄位值
-                    var accountInput = document.getElementById('login-acc').value;
-                    var passwordInput = document.getElementById('login-pwd').value;
+                loginBtn.addEventListener('click', function() {
+                    var accountInput = document.getElementById('login-acc').value.trim();
+                    var passwordInput = document.getElementById('login-pwd').value.trim();
 
-                    // 檢查金鑰協議 (支援 admin 或 admin_test)
+                    // 【身分 A】管理者登入
                     if ((accountInput === "admin_test" || accountInput === "admin") && passwordInput === "123456") {
-                        // 金鑰正確，無縫跳轉至後台管理矩陣
-                        window.location.href = "admin.html";
-                    } else {
-                        alert("⚠️ 權限拒絕：訪問金鑰錯誤或意識流未同步。");
+                        alert("⚔️ 管理權限驗證通過！即將進入系統後台矩陣。");
+                        window.location.href = "admin.html"; // 管理者後台檔案
+                    } 
+                    // 【身分 B】普通會員登入
+                    else if (accountInput === "user" && passwordInput === "1234") {
+                        alert("👋 玩家歡迎回來！即將進入個人會員中心。");
+                        window.location.href = "dashboard.html"; // 普通會員後台檔案
+                    } 
+                    // 【錯誤提示】
+                    else {
+                        alert("❌ 驗證失敗：帳號或密碼輸入錯誤。\n\n測試提示：\n• 管理者：admin / 123456\n• 一般玩家：user / 1234");
                     }
                 });
             }
@@ -586,7 +612,8 @@ header nav::-webkit-scrollbar-track {
     });
 </script>
 
+
 <!-- 補齊滿版網頁腳放版權聲明 -->
 <footer class="enforced-footer">
-    © 2026 實驗體 ONLINE. 本網頁為前端版型切頁展示。
+    © 2026 實驗體 ONLINE. 本網頁為前端版型切頁展示。 會員登入窗口 管理者：admin / 123456• 一般玩家：user / 1234
 </footer>
