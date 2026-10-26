@@ -481,49 +481,49 @@
                     <span class="bonus">贈 50 點</span>
                     <h3>150 點點數</h3>
                     <div class="price">NT$ 150</div>
-                    <button class="btn-buy" onclick="buyPoints(150)">立即購買</button>
+                    <button class="btn-buy" onclick="openTopUpModal('150 點點數')">儲值</button>
                 </div>
                 <!-- 方案 300 -->
                 <div class="shop-card">
                     <span class="bonus">贈 100 點</span>
                     <h3>300 點點數</h3>
                     <div class="price">NT$ 300</div>
-                    <button class="btn-buy" onclick="buyPoints(300)">立即購買</button>
+                    <button class="btn-buy" onclick="openTopUpModal('300 點點數')">儲值</button>
                 </div>
                 <!-- 方案 500 -->
                 <div class="shop-card">
                     <span class="bonus">贈 250 點</span>
                     <h3>500 點點數</h3>
                     <div class="price">NT$ 500</div>
-                    <button class="btn-buy" onclick="buyPoints(500)">立即購買</button>
+                    <button class="btn-buy" onclick="openTopUpModal('500 點點數')">儲值</button>
                 </div>
                 <!-- 方案 700 -->
                 <div class="shop-card">
                     <span class="bonus">贈 300 點</span>
                     <h3>700 點點數</h3>
                     <div class="price">NT$ 700</div>
-                    <button class="btn-buy" onclick="buyPoints(700)">立即購買</button>
+                    <button class="btn-buy" onclick="openTopUpModal('700 點點數')">儲值</button>
                 </div>
                 <!-- 方案 900 -->
                 <div class="shop-card">
                     <span class="bonus">贈 350 點</span>
                     <h3>900 點點數</h3>
                     <div class="price">NT$ 900</div>
-                    <button class="btn-buy" onclick="buyPoints(900)">立即購買</button>
+                    <button class="btn-buy" onclick="openTopUpModal('900 點點數')">儲值</button>
                 </div>
                 <!-- 方案 1000 -->
                 <div class="shop-card">
                     <span class="bonus">贈 400 點</span>
                     <h3>1000 點點數</h3>
                     <div class="price">NT$ 1,000</div>
-                    <button class="btn-buy" onclick="buyPoints(1000)">立即購買</button>
+                    <button class="btn-buy" onclick="openTopUpModal('1000 點點數')">儲值</button>
                 </div>
                 <!-- 方案 2000 -->
                 <div class="shop-card">
                     <span class="bonus">贈 600 點</span>
                     <h3>2000 點點數</h3>
                     <div class="price">NT$ 2,000</div>
-                    <button class="btn-buy" onclick="buyPoints(2000)">立即購買</button>
+                    <button class="btn-buy" onclick="openTopUpModal('2000 點點數')">儲值</button>
                 </div>
             </div> <!-- 完美閉合 shop-grid -->
         </section> <!-- 完美閉合 topup 區塊 -->
@@ -564,5 +564,240 @@
             alert(`【儲值確認】\n即將為您建立 NT$ ${amount.toLocaleString()} 的金流訂單，請於跳轉後的支付頁面完成付款。`);
         }
     </script>
+    <div id="purchaseModal" class="modal-overlay">
+    <div class="purchase-box">
+        <!-- 關閉按鈕 -->
+        <span class="close-modal-btn" onclick="closeTopUpModal()">&times;</span>
+        
+        <div class="purchase-header">
+            <h3>🛡️ 確定購買確認</h3>
+            <p>請確認您的儲值資訊並填寫付款資料</p>
+        </div>
+        
+        <form id="purchaseForm" onsubmit="submitPurchase(event)">
+            <!-- 確定購買的值 (由按鈕動態帶入) -->
+            <div class="input-group">
+                <label>確定購買項目 (Value)</label>
+                <input type="text" id="modalPlanValue" readonly style="background-color: #222; color: #00ffcc; font-weight: bold; border-color: #00ffcc;">
+            </div>
+
+            <!-- 名字 -->
+            <div class="input-group">
+                <label for="buyerName">持卡人姓名 (Name)</label>
+                <input type="text" id="buyerName" placeholder="請輸入姓名" required>
+            </div>
+
+            <!-- 信箱 -->
+            <div class="input-group">
+                <label for="buyerEmail">電子信箱 (Email)</label>
+                <input type="email" id="buyerEmail" placeholder="example@email.com" required>
+            </div>
+
+            <!-- 信用卡號碼 -->
+            <div class="input-group">
+                <label for="cardNumber">信用卡號碼 (Card Number)</label>
+                <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required>
+            </div>
+
+            <!-- 到期日 & 安全碼 -->
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="cardExpiry">有效日期 (MM/YY)</label>
+                    <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                </div>
+                <div class="input-group">
+                    <label for="cardCvc">安全碼 (CVC)</label>
+                    <input type="text" id="cardCvc" placeholder="123" maxlength="3" required>
+                </div>
+            </div>
+
+            <!-- 確定按鈕 -->
+            <button type="submit" class="btn-confirm">確定購買</button>
+        </form>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. 彈窗專屬 CSS 樣式 (相容你的暗黑風格) -->
+<!-- ========================================== -->
+<style>
+    /* 彈窗背景遮罩：滿版、半透明、預設隱藏 */
+    .modal-overlay {
+        display: none; 
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.75); /* 背景變暗 */
+        backdrop-filter: blur(4px); /* 背景模糊特效 */
+        z-index: 9999; /* 確保在最上層 */
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* 儲值視窗主體 */
+    .purchase-box {
+        background-color: #1a1a1a;
+        border: 2px solid #00ffcc;
+        border-radius: 10px;
+        padding: 30px;
+        width: 90%;
+        max-width: 440px;
+        position: relative;
+        box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+        animation: fadeInModal 0.3s ease-out;
+    }
+
+    /* 彈窗出現的動畫 */
+    @keyframes fadeInModal {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* 右上角關閉 X 按鈕 */
+    .close-modal-btn {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        color: #888;
+        font-size: 30px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .close-modal-btn:hover {
+        color: #00ffcc;
+    }
+
+    .purchase-header {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+    }
+    .purchase-header h3 {
+        color: #00ffcc;
+        margin: 0 0 8px 0;
+    }
+    .purchase-header p {
+        color: #aaa;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+    .input-group {
+        margin-bottom: 15px;
+    }
+    .input-group label {
+        display: block;
+        margin-bottom: 6px;
+        color: #00ffcc;
+        font-size: 0.9rem;
+    }
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        background-color: #252525;
+        border: 1px solid #444;
+        border-radius: 4px;
+        color: #fff;
+        box-sizing: border-box;
+        font-size: 0.95rem;
+    }
+    .input-group input:focus {
+        border-color: #00ffcc;
+        outline: none;
+    }
+    .input-row {
+        display: flex;
+        gap: 15px;
+    }
+    .input-row .input-group {
+        flex: 1;
+    }
+    .btn-confirm {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(45deg, #00bc9b, #00ffcc);
+        border: none;
+        border-radius: 4px;
+        color: #121212;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+        box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+    }
+    .btn-confirm:hover {
+        box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+    }
+</style>
+
+<!-- ========================================== -->
+<!-- 3. 彈窗邏輯與輸入框格式化 JavaScript -->
+<!-- ========================================== -->
+<script>
+    // 打開彈窗並帶入金額
+    function openTopUpModal(amountText) {
+        document.getElementById('modalPlanValue').value = amountText;
+        document.getElementById('purchaseModal').style.display = 'flex';
+    }
+
+    // 關閉彈窗
+    function closeTopUpModal() {
+        document.getElementById('purchaseModal').style.display = 'none';
+        document.getElementById('purchaseForm').reset(); // 關閉時清空輸入內容
+    }
+
+    // 點擊彈窗外部背景也可以關閉
+    window.onclick = function(event) {
+        const modal = document.getElementById('purchaseModal');
+        if (event.target == modal) {
+            closeTopUpModal();
+        }
+    }
+
+    // 信用卡卡號 4 位自動加空格
+    document.getElementById('cardNumber').addEventListener('input', function (e) {
+        let target = e.target;
+        let position = target.selectionStart;
+        let value = target.value.replace(/\D/g, '');
+        let formatted = '';
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 4 === 0) formatted += ' ';
+            formatted += value[i];
+        }
+        target.value = formatted;
+    });
+
+    // 有效日期自動加斜線 (MM/YY)
+    document.getElementById('cardExpiry').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 2) {
+            e.target.value = value.slice(0, 2) + '/' + value.slice(2, 4);
+        } else {
+            e.target.value = value;
+        }
+    });
+
+    // 只能輸入數字的安全碼 (CVC)
+    document.getElementById('cardCvc').addEventListener('input', function (e) {
+        e.target.value = e.target.value.replace(/\D/g, '');
+    });
+
+    // 確定購買提交測試
+    function submitPurchase(event) {
+    event.preventDefault();
+    const value = document.getElementById('modalPlanValue').value;
+    const name = document.getElementById('buyerName').value;
+    const email = document.getElementById('buyerEmail').value;
+        
+        alert(`【模擬交易成功】\n購買項目：${value}\n訂購人：${name}\n通知信箱：${email}\n\n已成功呼叫儲值視窗模型！`);
+
+        closeTopUpModal();
+}
+</script>
 </body>
 </html>

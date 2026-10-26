@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>實驗體 ONLINE - 信用卡購買模型</title>
+    <style>
+        /* 延續實驗體 ONLINE 暗黑科技風格 */
+        body {
+            background-color: #0b0b0b;
+            color: #ffffff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 信用卡購買模型主區塊 */
+        .purchase-model {
+            background-color: #161616;
+            border: 2px solid #00ffcc;
+            border-radius: 12px;
+            padding: 30px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.15);
+            box-sizing: border-box;
+        }
+
+        .model-title {
+            color: #00ffcc;
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.3);
+        }
+
+        .model-subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* 表單欄位群組 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-group.row .sub-input {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            color: #00ffcc;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 輸入框、下拉選單樣式 */
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #222222;
+            border: 1px solid #333333;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #00ffcc;
+            background-color: #2a2a2a;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 255, 204, 0.2);
+        }
+
+        /* 唯讀或強調欄位（確定購買該值） */
+        .value-highlight {
+            background-color: #1a2e2b !important;
+            border: 1px solid #00bc9b !important;
+            color: #00ffcc !important;
+            font-weight: bold;
+        }
+
+        /* 確定購買按鈕 */
+        .btn-confirm {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(45deg, #00bc9b, #00ffcc);
+            border: none;
+            border-radius: 6px;
+            color: #0b0b0b;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2);
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 204, 0.4);
+        }
+
+        .btn-confirm:active {
+            transform: translateY(0);
+        }
+
+        /* 水印或說明文字 */
+        .footer-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #555555;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 信用卡購買模型區塊 -->
+    <div class="purchase-model">
+        <div class="model-title">🛡️ 核心能源交易</div>
+        <div class="model-subtitle">請確認您的購買項目與信用卡資訊</div>
+
+        <form id="purchaseForm" onsubmit="submitPurchase(event)">
+            
+            <!-- 確定購買該值 -->
+            <div class="form-group">
+                <label for="purchaseValue">確定購買項目 (Value)</label>
+                <select id="purchaseValue" class="value-highlight" required>
+                    <option value="150_points">150 點數卡 (NT$ 150)</option>
+                    <option value="500_points" selected>520 點數超值包 (NT$ 500)</option>
+                    <option value="1000_points">1050 點數豪華包 (NT$ 1,000)</option>
+                    <option value="3200_points">3200 點數至尊包 (NT$ 3,000)</option>
+                    <option value="beta_weapon_key">🆕 測試武器核心解鎖碼 (NT$ 450)</option>
+                </select>
+            </div>
+
+            <!-- 名字 -->
+            <div class="form-group">
+                <label for="customerName">持卡人姓名 (Name)</label>
+                <input type="text" id="customerName" placeholder="請輸入信用卡持卡人姓名" required autocomplete="name">
+            </div>
+
+            <!-- 信箱 -->
+            <div class="form-group">
+                <label for="customerEmail">電子信箱 (Email)</label>
+                <input type="email" id="customerEmail" placeholder="example@email.com" required autocomplete="email">
+            </div>
+
+            <!-- 信用卡號與卡片基本資訊 -->
+            <div class="form-group">
+                <label for="cardNumber">信用卡號 (Credit Card)</label>
+                <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required>
+            </div>
+
+            <!-- 信用卡過期日與安全碼 -->
+            <div class="form-group row">
+                <div class="sub-input">
+                    <label for="cardExpiry">有效日期 (MM/YY)</label>
+                    <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                </div>
+                <div class="sub-input">
+                    <label for="cardCvc">安全碼 (CVC)</label>
+                    <input type="text" id="cardCvc" placeholder="123" maxlength="3" required>
+                </div>
+            </div>
+
+            <!-- 確定按鈕 -->
+            <button type="submit" class="btn-confirm">確 定 購 買 (Confirm)</button>
+        </form>
+
+        <div class="footer-note">© 2026 實驗體 ONLINE. 前端模型展示</div>
+    </div>
+
+    <!-- 欄位動態格式化與互動 JavaScript -->
+    <script>
+        // 1. 信用卡號自動每 4 碼加空格
+        const cardNumberInput = document.getElementById('cardNumber');
+        cardNumberInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let matches = value.match(/\d{4,16}/g);
+            let match = matches && matches[0] || '';
+            let parts = [];
+
+            for (let i = 0, len = match.length; i < len; i += 4) {
+                parts.push(match.substring(i, i + 4));
+            }
+
+            if (parts.length > 0) {
+                e.target.value = parts.join(' ');
+            } else {
+                e.target.value = value;
+            }
+        });
+
+        // 2. 有效日期自動加斜線 (MM/YY)
+        const cardExpiryInput = document.getElementById('cardExpiry');
+        cardExpiryInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                e.target.value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            } else {
+                e.target.value = value;
+            }
+        });
+
+        // 3. 安全碼只能輸入數字
+        const cardCvcInput = document.getElementById('cardCvc');
+        cardCvcInput.addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        // 4. 按下確定按鈕觸發事件
+        function submitPurchase(event) {
+            event.preventDefault();
+            
+            const itemValue = document.getElementById('purchaseValue').value;
+            const name = document.getElementById('customerName').value;
+            const email = document.getElementById('customerEmail').value;
+            const cardNum = document.getElementById('cardNumber').value;
+
+            // 僅保留卡號末四碼顯示以示安全
+            const maskedCard = cardNum.slice(-4);
+
+            alert(
+                `【實驗體 ONLINE - 模型測試確認】\n` +
+                `--------------------------------------\n` +
+                `🛒 購買項目：${itemValue}\n` +
+                `👤 購買姓名：${name}\n` +
+                `📧 電子信箱：${email}\n` +
+                `💳 卡號驗證：末四碼為 ${maskedCard}\n` +
+                `--------------------------------------\n` +
+                `前端模型資料驗證成功！`
+            );
+        }
+    </script>
+</body>
+</html>
