@@ -311,40 +311,67 @@ header nav::-webkit-scrollbar-track {
 }
 @media (max-width: 768px) {
 
-  /* 🎯 精準鎖定：抓出網頁裡並排的結構，命令它們在手機版一律不准壓縮、寬度滿版 */
+  /* 💣 1. 全域寬度炸彈：強制網頁上「所有元素」的寬度最大不能超過手機螢幕，防止東西爆出去消失 */
+  *, *:before, *:after {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 🥞 2. 全域直排命令：強迫所有並排的容器（不管是 Flex 還是表格）在手機上一律垂直疊羅漢 */
+  body, 
+  div, 
+  section, 
+  table, 
   tr, 
-  td, 
-  div[style*="display: flex"] > div, 
-  div[style*="display: inline-block"] {
-    display: block !important;       /* 強制改為直排，一排一排疊羅漢 */
-    width: 100% !important;         /* 寬度 100% 滿版，不和別人擠 */
-    max-width: 100% !important;
-    flex-shrink: 0 !important;       /* 核心特效藥：命令瀏覽器絕對不准壓縮任何一排！ */
-    flex-basis: 100% !important;
-    height: auto !important;         /* 高度放開，讓內容自由撐開 */
-    box-sizing: border-box !important;
-    margin-bottom: 20px !important;  /* 三排之間留下舒適的上下間距 */
-  }
-
-  /* 🛠️ 安全防護：強迫所有圖片和輸入框也自動適應手機寬度，不把中間那一排擠扁 */
-  img, input, select, textarea {
+  main {
+    display: block !important;
     width: 100% !important;
-    max-width: 100% !important;
     height: auto !important;
-    box-sizing: border-box !important;
+    float: none !important;
   }
 
-  /* 🚫 導覽列保護盾：強制讓最上方的導覽列完全免疫，保持原本電腦版的完美外觀 */
+  /* 🛡️ 3. 拯救中間那一排：解除所有寫死的寬度，強迫每一格都變滿版，絕對不准被擠扁 */
+  td, 
+  th, 
+  [style*="width"] {
+    display: block !important;
+    width: 100% !important; /* 強制覆蓋掉標籤裡寫死的 px 寬度 */
+    max-width: 100% !important;
+    min-width: 0 !important; /* 解除最小寬度限制 */
+    flex: none !important;
+    flex-shrink: 0 !important;
+    margin-bottom: 20px !important; /* 讓上下排有呼吸空間 */
+  }
+
+  /* 🧭 4. 導覽列與母選單特殊救回：不准直排！維持橫向，但如果塞不下，允許左右手指滑動 */
   .navbar, 
   nav, 
-  header, 
-  div[id*="nav"], 
-  div[class*="nav"],
-  div[style*="justify-content"] {
-    flex-direction: row !important; /* 堅持橫向橫排，絕不變成直排 */
+  header,
+  ul,
+  [style*="justify-content"] {
     display: flex !important;
-    height: auto !important;
-    padding: initial; /* 恢復您原本設定的內距 */
+    flex-direction: row !important; /* 強制橫排，不准變長 */
+    flex-wrap: nowrap !important;   /* 絕對不換行 */
+    overflow-x: auto !important;    /* 關鍵：寬度不夠時，允許手指左右滑動看選單，選單就不會消失了！ */
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+  }
+
+  /* 隱藏選單的醜滾動條 */
+  .navbar::-webkit-scrollbar, 
+  nav::-webkit-scrollbar, 
+  ul::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* 讓選單內的文字和按鈕乖乖橫向排隊，不要縮水 */
+  nav a, 
+  .navbar a, 
+  li {
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding: 10px 15px !important;
   }
 }
     </style>
